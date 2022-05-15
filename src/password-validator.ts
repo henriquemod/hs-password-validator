@@ -11,9 +11,9 @@ export type ErrorsOutput =
   | 'max'
   | 'uppercase'
   | 'lowercase'
-  | 'symbols'
-  | 'digits'
-  | 'spaces'
+  | 'symbol'
+  | 'number'
+  | 'space'
   | 'sequential'
   | 'strength'
 
@@ -42,7 +42,7 @@ interface ConfigScoreOptions {
 
 export interface ConfigProps {
   length?: ConfigLengthProps
-  showScore?: ConfigScoreOptions
+  scoreConfig?: ConfigScoreOptions
 }
 
 interface Props {
@@ -94,7 +94,7 @@ const hasLowercase = (pw: string): IErrors => {
 
 const hasSpace = (pw: string): IErrors => {
   return {
-    validation: 'spaces',
+    validation: 'space',
     message: 'Can not contain spaces',
     satisfied: new PasswordValidator()
       .has()
@@ -104,17 +104,17 @@ const hasSpace = (pw: string): IErrors => {
   }
 }
 
-const hasSymbols = (pw: string): IErrors => {
+const hasSymbol = (pw: string): IErrors => {
   return {
-    validation: 'symbols',
+    validation: 'symbol',
     message: 'At least one special character',
     satisfied: new PasswordValidator().has().symbols().validate(pw) as boolean
   }
 }
 
-const hasDigits = (pw: string): IErrors => {
+const hasNumber = (pw: string): IErrors => {
   return {
-    validation: 'digits',
+    validation: 'number',
     message: 'Must contain numbers',
     satisfied: new PasswordValidator().has().digits().validate(pw) as boolean
   }
@@ -168,9 +168,9 @@ const casesMap: Map<
   ['max', max],
   ['uppercase', hasUppercase],
   ['lowercase', hasLowercase],
-  ['symbols', hasSymbols],
-  ['digits', hasDigits],
-  ['spaces', hasSpace],
+  ['symbol', hasSymbol],
+  ['number', hasNumber],
+  ['space', hasSpace],
   ['sequential', hasSequential],
   ['strength', passwdScore]
 ])
@@ -179,7 +179,7 @@ const PwValidator = ({ password, options, config }: Props): Response => {
   const validationConfig = {
     minLength: config?.length?.minLength || DEFAULT_MIN_LENGTH,
     maxLength: config?.length?.maxLength || DEFAULT_MAX_LENGTH,
-    minAcceptable: config?.showScore?.minAcceptable || 'strong'
+    minAcceptable: config?.scoreConfig?.minAcceptable || 'strong'
   }
 
   const result: IErrors[] = []
