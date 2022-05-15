@@ -1,7 +1,7 @@
 {
   "name": "pw-validator",
   "version": "1.0.0",
-  "description": "",
+  "description": "A complete and comprehensive password validator",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha --require ts-node/register ./test/*.test.ts",
