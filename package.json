@@ -1,6 +1,6 @@
 {
   "name": "pw-validator",
-  "version": "1.0.0",
+  "version": "1.0.1-alpha.1.0",
   "description": "A complete and comprehensive password validator",
   "main": "index.js",
   "scripts": {
