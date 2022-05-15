@@ -53,7 +53,11 @@ interface Props {
 
 const min = (
   pw: string,
-  argument: { minLength: number; maxLength: number; minAcceptable: TagOptions }
+  argument: {
+    minLength: number
+    maxLength: number
+    minAcceptable: TagOptions
+  }
 ): IErrors => {
   return {
     validation: 'min',
@@ -150,7 +154,7 @@ const passwdScore = (
 }
 
 const isValidInput = (errors: IErrors[]): boolean => {
-  return errors.some(error => error.satisfied === false)
+  return errors.some((error) => error.satisfied === false)
 }
 
 const casesMap: Map<
@@ -177,20 +181,20 @@ const casesMap: Map<
 
 const PwValidator = ({ password, options, config }: Props): Response => {
   const validationConfig = {
-    minLength: config?.length?.minLength || DEFAULT_MIN_LENGTH,
-    maxLength: config?.length?.maxLength || DEFAULT_MAX_LENGTH,
-    minAcceptable: config?.scoreConfig?.minAcceptable || 'strong'
+    minLength: config?.length?.minLength ?? DEFAULT_MIN_LENGTH,
+    maxLength: config?.length?.maxLength ?? DEFAULT_MAX_LENGTH,
+    minAcceptable: config?.scoreConfig?.minAcceptable ?? 'strong'
   }
 
   const result: IErrors[] = []
 
   if (options) {
-    options.forEach(option => {
+    options.forEach((option) => {
       const validation = casesMap.get(option)
       validation && result.push(validation(password, validationConfig))
     })
   } else {
-    casesMap.forEach(value => {
+    casesMap.forEach((value) => {
       result.push(value(password, validationConfig))
     })
   }

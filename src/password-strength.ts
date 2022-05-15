@@ -23,7 +23,7 @@ const SYMBOLS = ')!@#$%^&*()'
 const MIN_PWD_LEN = 8
 
 // Used reference http://www.passwordmeter.com/
-export function checkPass(pwd: string) {
+export function checkPass(pwd: string): number {
   let score = 0
   let length = 0
   let alphaUC = 0
@@ -223,17 +223,20 @@ export default pipe(
   defaultTo(''),
   checkPass,
   cond([
-    [equals(SCORE_EMPTY), score => [score, 'empty', '']],
+    [equals(SCORE_EMPTY), (score) => [score, 'empty', '']],
     [
       gt(SCORE_WORST),
-      score => [score, 'worst', 'Por favor, crie uma senha mais forte!']
+      (score) => [score, 'worst', 'Please create a stronger password!']
     ],
     [
       gt(SCORE_BAD),
-      score => [score, 'bad', 'Por favor, crie uma senha mais forte!']
+      (score) => [score, 'bad', 'Please create a stronger password!']
     ],
-    [gt(SCORE_WEAK), score => [score, 'weak', 'Boa senha, mas pode melhorar!']],
-    [gt(SCORE_GOOD), score => [score, 'good', 'Muito bem!']],
-    [lte(SCORE_GOOD), score => [score, 'strong', 'Excelente!']]
+    [
+      gt(SCORE_WEAK),
+      (score) => [score, 'weak', 'Good password, but can be better!']
+    ],
+    [gt(SCORE_GOOD), (score) => [score, 'good', 'Very good!']],
+    [lte(SCORE_GOOD), (score) => [score, 'strong', 'Excellent!']]
   ])
 )
