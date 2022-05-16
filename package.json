@@ -14,7 +14,7 @@
     "start": "tsdx watch",
     "build": "tsdx build --colors",
     "test": "tsdx test",
-    "lint": "tsdx lint",
+    "lint": "tsdx lint src",
     "prepare": "tsdx build",
     "size": "size-limit",
     "analyze": "size-limit --why"

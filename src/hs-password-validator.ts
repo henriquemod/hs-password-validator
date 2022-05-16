@@ -1,11 +1,11 @@
-import PasswordValidator from 'password-validator'
-import getStrength from './password-strength'
+import PasswordValidator from 'password-validator';
+import getStrength from './password-strength';
 
-const DEFAULT_MIN_LENGTH = 10
-const DEFAULT_MAX_LENGTH = 128
-const AVAILABLE_TAGS: TagOptions[] = ['worst', 'bad', 'weak', 'good', 'strong']
+const DEFAULT_MIN_LENGTH = 10;
+const DEFAULT_MAX_LENGTH = 128;
+const AVAILABLE_TAGS: TagOptions[] = ['worst', 'bad', 'weak', 'good', 'strong'];
 
-type TagOptions = 'worst' | 'bad' | 'weak' | 'good' | 'strong'
+type TagOptions = 'worst' | 'bad' | 'weak' | 'good' | 'strong';
 export type ErrorsOutput =
   | 'min'
   | 'max'
@@ -15,48 +15,48 @@ export type ErrorsOutput =
   | 'number'
   | 'space'
   | 'sequential'
-  | 'strength'
+  | 'strength';
 
 export interface IErrors {
-  validation: ErrorsOutput
-  arguments?: number
-  inverted?: boolean
-  tag?: string
-  message: string
-  satisfied: boolean | undefined
+  validation: ErrorsOutput;
+  arguments?: number;
+  inverted?: boolean;
+  tag?: string;
+  message: string;
+  satisfied: boolean | undefined;
 }
 
 export interface Response {
-  hasInvalidFields: boolean
-  data: IErrors[]
+  hasInvalidFields: boolean;
+  data: IErrors[];
 }
 
 interface ConfigLengthProps {
-  minLength?: number
-  maxLength?: number
+  minLength?: number;
+  maxLength?: number;
 }
 
 interface ConfigScoreOptions {
-  minAcceptable: TagOptions
+  minAcceptable: TagOptions;
 }
 
 export interface ConfigProps {
-  length?: ConfigLengthProps
-  scoreConfig?: ConfigScoreOptions
+  length?: ConfigLengthProps;
+  scoreConfig?: ConfigScoreOptions;
 }
 
 interface Props {
-  password: string
-  options?: ErrorsOutput[]
-  config?: ConfigProps
+  password: string;
+  options?: ErrorsOutput[];
+  config?: ConfigProps;
 }
 
 const min = (
   pw: string,
   argument: {
-    minLength: number
-    maxLength: number
-    minAcceptable: TagOptions
+    minLength: number;
+    maxLength: number;
+    minAcceptable: TagOptions;
   }
 ): IErrors => {
   return {
@@ -65,9 +65,9 @@ const min = (
     message: `Must contain at least ${argument.minLength} characters`,
     satisfied: new PasswordValidator()
       .min(argument.minLength)
-      .validate(pw) as boolean
-  }
-}
+      .validate(pw) as boolean,
+  };
+};
 
 const max = (pw: string, argument: { maxLength: number }): IErrors => {
   return {
@@ -76,25 +76,28 @@ const max = (pw: string, argument: { maxLength: number }): IErrors => {
     message: `Must contain at most ${argument.maxLength} characters`,
     satisfied: new PasswordValidator()
       .max(argument.maxLength)
-      .validate(pw) as boolean
-  }
-}
+      .validate(pw) as boolean,
+  };
+};
 
 const hasUppercase = (pw: string): IErrors => {
   return {
     validation: 'uppercase',
     message: 'At least one uppercase letter',
-    satisfied: new PasswordValidator().uppercase().validate(pw) as boolean
-  }
-}
+    satisfied: new PasswordValidator().uppercase().validate(pw) as boolean,
+  };
+};
 
 const hasLowercase = (pw: string): IErrors => {
   return {
     validation: 'lowercase',
     message: 'At least one lowercase letter',
-    satisfied: new PasswordValidator().has().lowercase().validate(pw) as boolean
-  }
-}
+    satisfied: new PasswordValidator()
+      .has()
+      .lowercase()
+      .validate(pw) as boolean,
+  };
+};
 
 const hasSpace = (pw: string): IErrors => {
   return {
@@ -104,44 +107,50 @@ const hasSpace = (pw: string): IErrors => {
       .has()
       .not()
       .spaces()
-      .validate(pw) as boolean
-  }
-}
+      .validate(pw) as boolean,
+  };
+};
 
 const hasSymbol = (pw: string): IErrors => {
   return {
     validation: 'symbol',
     message: 'At least one special character',
-    satisfied: new PasswordValidator().has().symbols().validate(pw) as boolean
-  }
-}
+    satisfied: new PasswordValidator()
+      .has()
+      .symbols()
+      .validate(pw) as boolean,
+  };
+};
 
 const hasNumber = (pw: string): IErrors => {
   return {
     validation: 'number',
     message: 'Must contain numbers',
-    satisfied: new PasswordValidator().has().digits().validate(pw) as boolean
-  }
-}
+    satisfied: new PasswordValidator()
+      .has()
+      .digits()
+      .validate(pw) as boolean,
+  };
+};
 
 const hasSequential = (pw: string): IErrors => {
-  const regex = /(\w)\1+/
+  const regex = /(\w)\1+/;
   return {
     validation: 'sequential',
     message: 'No sequential characters',
-    satisfied: !regex.test(pw)
-  }
-}
+    satisfied: !regex.test(pw),
+  };
+};
 
 const passwdScore = (
   pw: string,
   argument: { minAcceptable: TagOptions }
 ): IErrors => {
-  const pwStrength = getStrength(pw)
-  const isZeroScore = pwStrength[0] === 0
-  const tag = isZeroScore ? 'worst' : (pwStrength[1] as TagOptions)
+  const pwStrength = getStrength(pw);
+  const isZeroScore = pwStrength[0] === 0;
+  const tag = isZeroScore ? 'worst' : (pwStrength[1] as TagOptions);
 
-  const message = `Password level: ${tag}`
+  const message = `Password level: ${tag}`;
 
   return {
     validation: 'strength',
@@ -149,22 +158,22 @@ const passwdScore = (
     message,
     satisfied:
       AVAILABLE_TAGS.indexOf(tag) >=
-      AVAILABLE_TAGS.indexOf(argument.minAcceptable)
-  } as IErrors
-}
+      AVAILABLE_TAGS.indexOf(argument.minAcceptable),
+  } as IErrors;
+};
 
 const isValidInput = (errors: IErrors[]): boolean => {
-  return errors.some((error) => error.satisfied === false)
-}
+  return errors.some(error => error.satisfied === false);
+};
 
 const casesMap: Map<
   string,
   (
     password: string,
     argument: {
-      minLength: number
-      maxLength: number
-      minAcceptable: TagOptions
+      minLength: number;
+      maxLength: number;
+      minAcceptable: TagOptions;
     }
   ) => IErrors
 > = new Map([
@@ -176,33 +185,33 @@ const casesMap: Map<
   ['number', hasNumber],
   ['space', hasSpace],
   ['sequential', hasSequential],
-  ['strength', passwdScore]
-])
+  ['strength', passwdScore],
+]);
 
 const PwValidator = ({ password, options, config }: Props): Response => {
   const validationConfig = {
     minLength: config?.length?.minLength ?? DEFAULT_MIN_LENGTH,
     maxLength: config?.length?.maxLength ?? DEFAULT_MAX_LENGTH,
-    minAcceptable: config?.scoreConfig?.minAcceptable ?? 'strong'
-  }
+    minAcceptable: config?.scoreConfig?.minAcceptable ?? 'strong',
+  };
 
-  const result: IErrors[] = []
+  const result: IErrors[] = [];
 
   if (options) {
-    options.forEach((option) => {
-      const validation = casesMap.get(option)
-      validation && result.push(validation(password, validationConfig))
-    })
+    options.forEach(option => {
+      const validation = casesMap.get(option);
+      validation && result.push(validation(password, validationConfig));
+    });
   } else {
-    casesMap.forEach((value) => {
-      result.push(value(password, validationConfig))
-    })
+    casesMap.forEach(value => {
+      result.push(value(password, validationConfig));
+    });
   }
 
   return {
     hasInvalidFields: isValidInput(result),
-    data: result
-  }
-}
+    data: result,
+  };
+};
 
-export default PwValidator
+export default PwValidator;
