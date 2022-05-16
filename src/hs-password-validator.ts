@@ -1,4 +1,4 @@
-import PasswordValidator from 'password-validator';
+import LibPasswordValidator from 'password-validator';
 import getStrength from './password-strength';
 
 const DEFAULT_MIN_LENGTH = 10;
@@ -63,7 +63,7 @@ const min = (
     validation: 'min',
     arguments: argument.minLength,
     message: `Must contain at least ${argument.minLength} characters`,
-    satisfied: new PasswordValidator()
+    satisfied: new LibPasswordValidator()
       .min(argument.minLength)
       .validate(pw) as boolean,
   };
@@ -74,7 +74,7 @@ const max = (pw: string, argument: { maxLength: number }): IErrors => {
     validation: 'max',
     arguments: argument.maxLength,
     message: `Must contain at most ${argument.maxLength} characters`,
-    satisfied: new PasswordValidator()
+    satisfied: new LibPasswordValidator()
       .max(argument.maxLength)
       .validate(pw) as boolean,
   };
@@ -84,7 +84,7 @@ const hasUppercase = (pw: string): IErrors => {
   return {
     validation: 'uppercase',
     message: 'At least one uppercase letter',
-    satisfied: new PasswordValidator().uppercase().validate(pw) as boolean,
+    satisfied: new LibPasswordValidator().uppercase().validate(pw) as boolean,
   };
 };
 
@@ -92,7 +92,7 @@ const hasLowercase = (pw: string): IErrors => {
   return {
     validation: 'lowercase',
     message: 'At least one lowercase letter',
-    satisfied: new PasswordValidator()
+    satisfied: new LibPasswordValidator()
       .has()
       .lowercase()
       .validate(pw) as boolean,
@@ -103,7 +103,7 @@ const hasSpace = (pw: string): IErrors => {
   return {
     validation: 'space',
     message: 'Can not contain spaces',
-    satisfied: new PasswordValidator()
+    satisfied: new LibPasswordValidator()
       .has()
       .not()
       .spaces()
@@ -115,7 +115,7 @@ const hasSymbol = (pw: string): IErrors => {
   return {
     validation: 'symbol',
     message: 'At least one special character',
-    satisfied: new PasswordValidator()
+    satisfied: new LibPasswordValidator()
       .has()
       .symbols()
       .validate(pw) as boolean,
@@ -126,7 +126,7 @@ const hasNumber = (pw: string): IErrors => {
   return {
     validation: 'number',
     message: 'Must contain numbers',
-    satisfied: new PasswordValidator()
+    satisfied: new LibPasswordValidator()
       .has()
       .digits()
       .validate(pw) as boolean,
@@ -188,7 +188,11 @@ const casesMap: Map<
   ['strength', passwdScore],
 ]);
 
-const PwValidator = ({ password, options, config }: Props): Response => {
+export const PasswordValidator = ({
+  password,
+  options,
+  config,
+}: Props): Response => {
   const validationConfig = {
     minLength: config?.length?.minLength ?? DEFAULT_MIN_LENGTH,
     maxLength: config?.length?.maxLength ?? DEFAULT_MAX_LENGTH,
@@ -214,4 +218,4 @@ const PwValidator = ({ password, options, config }: Props): Response => {
   };
 };
 
-export default PwValidator;
+// export default PwValidator;

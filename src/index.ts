@@ -1,2 +1,2 @@
-import PwValidator from './hs-password-validator';
-export default PwValidator;
+import { PasswordValidator } from './hs-password-validator';
+export default PasswordValidator;

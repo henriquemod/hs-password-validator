@@ -1,12 +1,12 @@
 import { expect } from 'chai';
-import PwValidator from '../src/hs-password-validator';
+import PasswordValidator from '../src';
 
 describe('PasswordValidator', () => {
   describe('min', () => {
     it('should return false if the password is longer than the minimum length', () => {
       const password = '123456789';
       const minLength = 8;
-      const result = PwValidator({
+      const result = PasswordValidator({
         password,
         options: ['min'],
         config: { length: { minLength } },
@@ -18,7 +18,7 @@ describe('PasswordValidator', () => {
     it('should return true if the password is shorter than the minimum length', () => {
       const password = '1234567';
       const minLength = 8;
-      const result = PwValidator({
+      const result = PasswordValidator({
         password,
         options: ['min'],
         config: { length: { minLength } },
@@ -33,7 +33,7 @@ describe('PasswordValidator', () => {
     it('should return false if the password is shorter than the maximum length', () => {
       const password = '123456';
       const maxLength = 8;
-      const result = PwValidator({
+      const result = PasswordValidator({
         password,
         options: ['max'],
         config: { length: { maxLength } },
@@ -47,7 +47,7 @@ describe('PasswordValidator', () => {
     it('should return true if the password is longer than the maximum length', () => {
       const password = '123456789';
       const maxLength = 8;
-      const result = PwValidator({
+      const result = PasswordValidator({
         password,
         options: ['max'],
         config: { length: { maxLength } },
@@ -61,7 +61,7 @@ describe('PasswordValidator', () => {
   describe('uppercase', () => {
     it('should return false if password has at least one uppercase letter', () => {
       const password = 'Abcdefgh';
-      const result = PwValidator({
+      const result = PasswordValidator({
         password,
         options: ['uppercase'],
       });
@@ -71,7 +71,7 @@ describe('PasswordValidator', () => {
     });
     it('should return true if password has no uppercase letter', () => {
       const password = 'abcdefgh';
-      const result = PwValidator({
+      const result = PasswordValidator({
         password,
         options: ['uppercase'],
       });
@@ -84,7 +84,7 @@ describe('PasswordValidator', () => {
   describe('lowercase', () => {
     it('should return false if password has at least one lowercase letter', () => {
       const password = 'ABCDEFg';
-      const result = PwValidator({
+      const result = PasswordValidator({
         password,
         options: ['lowercase'],
       });
@@ -94,7 +94,7 @@ describe('PasswordValidator', () => {
     });
     it('should return true if password has no lowercase letter', () => {
       const password = 'ABCDEFG';
-      const result = PwValidator({
+      const result = PasswordValidator({
         password,
         options: ['lowercase'],
       });
@@ -107,7 +107,7 @@ describe('PasswordValidator', () => {
   describe('symbol', () => {
     it('should return false if password has at least one symbol', () => {
       const password = '@bcdefgh';
-      const result = PwValidator({
+      const result = PasswordValidator({
         password,
         options: ['symbol'],
       });
@@ -117,7 +117,7 @@ describe('PasswordValidator', () => {
     });
     it('should return true if password has no symbol', () => {
       const password = 'abcdefgh';
-      const result = PwValidator({
+      const result = PasswordValidator({
         password,
         options: ['symbol'],
       });
@@ -130,7 +130,7 @@ describe('PasswordValidator', () => {
   describe('number', () => {
     it('should return false if password has at least one number', () => {
       const password = '1abcdefgh';
-      const result = PwValidator({
+      const result = PasswordValidator({
         password,
         options: ['number'],
       });
@@ -140,7 +140,7 @@ describe('PasswordValidator', () => {
     });
     it('should return true if password has no number', () => {
       const password = 'abcdefgh';
-      const result = PwValidator({
+      const result = PasswordValidator({
         password,
         options: ['number'],
       });
@@ -153,7 +153,7 @@ describe('PasswordValidator', () => {
   describe('space', () => {
     it("should return false if password hasn't space", () => {
       const password = 'abcdefgh';
-      const result = PwValidator({
+      const result = PasswordValidator({
         password,
         options: ['space'],
       });
@@ -163,7 +163,7 @@ describe('PasswordValidator', () => {
     });
     it('should return true if password has space', () => {
       const password = 'abcd efgh';
-      const result = PwValidator({
+      const result = PasswordValidator({
         password,
         options: ['space'],
       });
@@ -176,7 +176,7 @@ describe('PasswordValidator', () => {
   describe('sequential', () => {
     it("should return false if password hasn't sequential letters", () => {
       const password = 'abcdefgh';
-      const result = PwValidator({
+      const result = PasswordValidator({
         password,
         options: ['sequential'],
       });
@@ -186,7 +186,7 @@ describe('PasswordValidator', () => {
     });
     it('should return true if password has sequential letters', () => {
       const password = 'abcddefgh';
-      const result = PwValidator({
+      const result = PasswordValidator({
         password,
         options: ['sequential'],
       });
@@ -199,7 +199,7 @@ describe('PasswordValidator', () => {
   describe('strength', () => {
     it('should return strong when strong password is provided', () => {
       const password = 'ASDasd@#$123_';
-      const result = PwValidator({
+      const result = PasswordValidator({
         password,
         options: ['strength'],
         config: { scoreConfig: { minAcceptable: 'strong' } },
@@ -211,7 +211,7 @@ describe('PasswordValidator', () => {
     });
     it('should return good when good password is provided', () => {
       const password = 'ASDasd$12';
-      const result = PwValidator({
+      const result = PasswordValidator({
         password,
         options: ['strength'],
         config: { scoreConfig: { minAcceptable: 'good' } },
@@ -223,7 +223,7 @@ describe('PasswordValidator', () => {
     });
     it('should return weak when weak password is provided', () => {
       const password = 'ASDasd11';
-      const result = PwValidator({
+      const result = PasswordValidator({
         password,
         options: ['strength'],
         config: { scoreConfig: { minAcceptable: 'weak' } },
@@ -236,7 +236,7 @@ describe('PasswordValidator', () => {
 
     it('should return bad when bad password is provided', () => {
       const password = 'ASDasd';
-      const result = PwValidator({
+      const result = PasswordValidator({
         password,
         options: ['strength'],
         config: { scoreConfig: { minAcceptable: 'bad' } },
@@ -249,7 +249,7 @@ describe('PasswordValidator', () => {
 
     it('should return worst when worst password is provided', () => {
       const password = 'asd';
-      const result = PwValidator({
+      const result = PasswordValidator({
         password,
         options: ['strength'],
         config: { scoreConfig: { minAcceptable: 'worst' } },
@@ -266,7 +266,7 @@ describe('PasswordValidator', () => {
       const password = '123123Abc';
       const minLength = 8;
       const maxLength = 16;
-      const result = PwValidator({
+      const result = PasswordValidator({
         password,
         options: ['min', 'max', 'uppercase'],
         config: { length: { minLength, maxLength } },
@@ -284,7 +284,7 @@ describe('PasswordValidator', () => {
       const minLength = 8;
       const maxLength = 10;
       const validate = (pw: string) =>
-        PwValidator({
+        PasswordValidator({
           password: pw,
           options: ['min', 'max', 'uppercase'],
           config: { length: { minLength, maxLength } },
