@@ -1,14 +1,13 @@
 {
-  "version": "1.0.1-alpha.1.4",
+  "version": "1.0.1-alpha.1.5",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "engines": {
-    "node": ">=10"
+    "node": ">=12"
   },
   "scripts": {
     "start": "tsdx watch",
