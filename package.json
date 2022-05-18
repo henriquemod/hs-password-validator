@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -33,6 +33,19 @@
   "name": "hs-password-validator",
   "author": "Henrique Souza",
   "module": "dist/hs-password-validator.esm.js",
+  "keywords": [
+    "password",
+    "validator",
+    "rules",
+    "schema",
+    "validation",
+    "check",
+    "match"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/henriquemod/hs-password-validator"
+  },
   "size-limit": [
     {
       "path": "dist/hs-password-validator.cjs.production.min.js",
