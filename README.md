@@ -1,6 +1,10 @@
-# Password Validator
 
-> A complete and comprehensive password validator
+<img width="1127" alt="pw-validator-logo" src="https://user-images.githubusercontent.com/43145168/169714987-748656b8-c61b-49d8-80ed-547f13a7c82a.png">
+
+<div align="center">
+  A complete and comprehensive password validator
+</div>
+
 
 ## Prerequisites
 
