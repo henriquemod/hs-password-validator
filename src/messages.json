@@ -1,0 +1,24 @@
+{
+    "en-US": {
+        "min": "Must contain as least {0} characters",
+        "max" : "Must contain as most {0} characters",
+        "uppercase": "At least one uppercase letter",
+        "lowercase": "At least one lowercase letter",
+        "space": "Can not contain spaces",
+        "symbol": "At least one special character",
+        "number": "Must contain numbers",
+        "hasSequential": "Must not contain sequential characters",
+        "strength": "Password strength: {0}"
+    },
+    "pt-BR": {
+        "min": "Deve conter no mínimo {0} caracteres",
+        "max" : "Deve conter no máximo {0} caracteres",
+        "uppercase": "Pelo menos uma letra maiúscula",
+        "lowercase": "Pelo menos uma letra minúscula",
+        "space": "Não pode conter espaços",
+        "symbol": "Pelo menos um caractere especial",
+        "number": "Deve conter números",
+        "hasSequential": "Não pode conter sequências de caracteres",
+        "strength": "Força da senha: {0}"
+    }
+}

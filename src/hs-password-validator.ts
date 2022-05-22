@@ -1,10 +1,15 @@
 import LibPasswordValidator from 'password-validator';
 import getStrength from './password-strength';
+import messages from './messages.json';
+
+const StringFormat = (str: string, ...args: string[]) =>
+  str.replace(/{(\d+)}/g, (_, index) => args[index]);
 
 const DEFAULT_MIN_LENGTH = 10;
 const DEFAULT_MAX_LENGTH = 128;
 const AVAILABLE_TAGS: TagOptions[] = ['worst', 'bad', 'weak', 'good', 'strong'];
 
+type Language = 'en-US' | 'pt-BR';
 type TagOptions = 'worst' | 'bad' | 'weak' | 'good' | 'strong';
 export type ErrorsOutput =
   | 'min'
@@ -43,6 +48,7 @@ interface ConfigScoreOptions {
 export interface ConfigProps {
   length?: ConfigLengthProps;
   scoreConfig?: ConfigScoreOptions;
+  lang?: Language;
 }
 
 interface Props {
@@ -57,41 +63,51 @@ const min = (
     minLength: number;
     maxLength: number;
     minAcceptable: TagOptions;
+    lang: Language;
   }
 ): IErrors => {
   return {
     validation: 'min',
     arguments: argument.minLength,
-    message: `Must contain at least ${argument.minLength} characters`,
+    message: StringFormat(
+      messages[argument.lang].min,
+      argument.minLength.toString()
+    ),
     satisfied: new LibPasswordValidator()
       .min(argument.minLength)
       .validate(pw) as boolean,
   };
 };
 
-const max = (pw: string, argument: { maxLength: number }): IErrors => {
+const max = (
+  pw: string,
+  argument: { maxLength: number; lang: Language }
+): IErrors => {
   return {
     validation: 'max',
     arguments: argument.maxLength,
-    message: `Must contain at most ${argument.maxLength} characters`,
+    message: StringFormat(
+      messages[argument.lang].max,
+      argument.maxLength.toString()
+    ),
     satisfied: new LibPasswordValidator()
       .max(argument.maxLength)
       .validate(pw) as boolean,
   };
 };
 
-const hasUppercase = (pw: string): IErrors => {
+const hasUppercase = (pw: string, argument: { lang: Language }): IErrors => {
   return {
     validation: 'uppercase',
-    message: 'At least one uppercase letter',
+    message: messages[argument.lang].uppercase,
     satisfied: new LibPasswordValidator().uppercase().validate(pw) as boolean,
   };
 };
 
-const hasLowercase = (pw: string): IErrors => {
+const hasLowercase = (pw: string, argument: { lang: Language }): IErrors => {
   return {
     validation: 'lowercase',
-    message: 'At least one lowercase letter',
+    message: messages[argument.lang].lowercase,
     satisfied: new LibPasswordValidator()
       .has()
       .lowercase()
@@ -99,10 +115,10 @@ const hasLowercase = (pw: string): IErrors => {
   };
 };
 
-const hasSpace = (pw: string): IErrors => {
+const hasSpace = (pw: string, argument: { lang: Language }): IErrors => {
   return {
     validation: 'space',
-    message: 'Can not contain spaces',
+    message: messages[argument.lang].space,
     satisfied: new LibPasswordValidator()
       .has()
       .not()
@@ -111,10 +127,10 @@ const hasSpace = (pw: string): IErrors => {
   };
 };
 
-const hasSymbol = (pw: string): IErrors => {
+const hasSymbol = (pw: string, argument: { lang: Language }): IErrors => {
   return {
     validation: 'symbol',
-    message: 'At least one special character',
+    message: messages[argument.lang].symbol,
     satisfied: new LibPasswordValidator()
       .has()
       .symbols()
@@ -122,10 +138,10 @@ const hasSymbol = (pw: string): IErrors => {
   };
 };
 
-const hasNumber = (pw: string): IErrors => {
+const hasNumber = (pw: string, argument: { lang: Language }): IErrors => {
   return {
     validation: 'number',
-    message: 'Must contain numbers',
+    message: messages[argument.lang].number,
     satisfied: new LibPasswordValidator()
       .has()
       .digits()
@@ -133,24 +149,24 @@ const hasNumber = (pw: string): IErrors => {
   };
 };
 
-const hasSequential = (pw: string): IErrors => {
+const hasSequential = (pw: string, argument: { lang: Language }): IErrors => {
   const regex = /(\w)\1+/;
   return {
     validation: 'sequential',
-    message: 'No sequential characters',
+    message: messages[argument.lang].hasSequential,
     satisfied: !regex.test(pw),
   };
 };
 
 const passwdScore = (
   pw: string,
-  argument: { minAcceptable: TagOptions }
+  argument: { minAcceptable: TagOptions; lang: Language }
 ): IErrors => {
   const pwStrength = getStrength(pw);
   const isZeroScore = pwStrength[0] === 0;
   const tag = isZeroScore ? 'worst' : (pwStrength[1] as TagOptions);
 
-  const message = `Password level: ${tag}`;
+  const message = StringFormat(messages[argument.lang].strength, tag);
 
   return {
     validation: 'strength',
@@ -174,6 +190,7 @@ const casesMap: Map<
       minLength: number;
       maxLength: number;
       minAcceptable: TagOptions;
+      lang: Language;
     }
   ) => IErrors
 > = new Map([
@@ -197,6 +214,7 @@ export const PasswordValidator = ({
     minLength: config?.length?.minLength ?? DEFAULT_MIN_LENGTH,
     maxLength: config?.length?.maxLength ?? DEFAULT_MAX_LENGTH,
     minAcceptable: config?.scoreConfig?.minAcceptable ?? 'strong',
+    lang: config?.lang ?? 'en-US',
   };
 
   const result: IErrors[] = [];
@@ -217,5 +235,3 @@ export const PasswordValidator = ({
     data: result,
   };
 };
-
-// export default PwValidator;

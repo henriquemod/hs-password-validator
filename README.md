@@ -93,6 +93,34 @@ console.log(validate)
 */
 ```
 
+### Language
+
+This package supports multiple languages. You can change the language by setting the `lang` config.
+_By default this package use en-US, for now only english and pourtuguese br were supported, more in the future_
+
+```ts
+const validate = PasswordValidator({
+  password: 'ShortPassword',
+  options: ['min'],
+  config: { length: { minLength: 16 }, lang: 'pt-BR' }
+})
+
+console.log(validate)
+/*
+{
+    "hasInvalidFields": true,
+    "data": [
+        {
+            "validation": "min",
+            "arguments": 16,
+            "message": "Deve conter no mínimo 16 caracteres",
+            "satisfied": false
+        }
+    ]
+}
+*/
+```
+
 ## Multiples options
 
 You can combine multiple options to validate a password.
@@ -168,3 +196,10 @@ console.log(validate)
 | Option | Description | Default |
 | ------ | :---: | :---: |
 | minAcceptable | Minimun strength allowed  | strong |
+
+### Language Config
+
+| Option | Description | Default |
+| ------ | :---: | :---: |
+| lang | Set the messages language  | en-US |
+_Available: en-US, pt-BR_
